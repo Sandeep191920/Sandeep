@@ -1,0 +1,1894 @@
+Primary Key:
+=============
+
+Primary key is a constraint
+Primary constraint is the combination of two constrains
+1)UNIQUE
+2)NOT NULL
+
+When we use primary key constraint for a column then that column value shouldn't be null and it should be unique.
+
+it is not recommended to set values for primary key column manually
+
+we will use generators to generate the value for primary key column
+
+To use Geneator we will use @GeneratedValue annotation.
+
+In mysql database we will use auto_increment to generate value for primary key. To specify auto_increment we will use IDENTITY generator.
+
+		@Id
+	@Column(name="Book_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer bookid;
+	
+In ORACLE database we will use sequence concept to generate value for primarykey column. For every primary key one sequence will be created in database.
+
+if we want to generate primary key column value like below then we shoud go for custom generator(Our own generator we have to develop)
+
+INF01
+INF02
+INF03
+
+Composite Primary key:
+=================================
+Table can have more than one primary key those primary keys are called as composite primary key.
+
+create table Account
+(
+ACC_ID NUMBER,
+ACC_NUMBER NUMBER,
+HOLDER_NAME VARCHAR2(10),
+ACC_TYPE VARCHAR2(10),
+BRANCH_NAME VARCHAR2(10)
+
+PRIMARY KEY (ACC_ID,ACC_NUMBER,BRANCH_NAME)
+)
+
+Note: For Composite Primary key we can't use generator. we have to set values manually
+
+====================================================================================
+
+Transaction management in DataJPA
++++++++++++++++++++++++++++++++++
+
+	Unit amount of work is called as Transaction.
+	When we are performing non select operations we need to deal with Transaction.
+	For select operations transactions are not required.
+	In Data JPA it is care of transaction Management.
+	If all operations are successfull then we should commit transaction.
+	if any operation is failed in the transaction then we need to rollback that transaction.
+	when we are working with Transaction we need to follow ACID Properties.
+	
+	Commit means storing the data in database permanently.
+	
+	Rollback means bringing database to previous state  
+
+	A==Atomocity
+	C==Consistency
+	I==Isolation
+	D==Durability
+	
+	
+What is DataJPA?
+Advantage of DataJPA?
+Entity class with annotation
+Repository interface
+crud Repository
+JPA Repository
+CrudRespository interface methods
+JPARepository interface methods
+pagination
+sorting
+QuerybyExample
+findBy
+custom queries
+native sql vs HQL
+Dialect class
+Timestamping
+Generators
+primary key
+Composite primary key
+Transaction Rollback
+Large Objects
+
+
+=====================================================================
+
+Course Restful Services & Microservices
+
+prerequisites : Spring core Module and spring boot basics
+
+Course Content: Spring Web MVC, Restful Services & Microservices
+
+Spring Web MVC
+========================
+
+*Spring Web Mvc is one module available in spring framework.
+*Using spring web mvc we can develop 2 types of application.
+
+	1)Web Applications
+	2)Distributed Applications
+
+Web application will have user interface.
+Customers can access web application directly using Internet
+Web Applications meant for customer to business communication
+
+ex: facebook , gmail, Likedin,naukri
+
+Distributed applications are meant for business to business application.
+if one application is communicating with another applicaton then we call them distributed appliation.
+Distributed application we can develop in 2 ways 
+	1)Soap webservice
+	2)Restful service
+	
+ex:Make my trip,phonepe, Googlepay
+	
+Note: SOAP Webservices and REST services can be developed by using Spring web MVC.
+
+Distributed application we are developing to re-use the logic of one application in another application.
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Advantages of spring web mvc
++++++++++++++++++++++++++++++++++++++++++
+
+1)Easily we can develop web & distributed application using webmvc module.
+2)It supports Multiple Presentation Technologies(JSP & Thymleaf).
+3)I 18N Support(Internationalization)
+4)Form Bindings(Form Data will be binded to object and vice versa)
+5)Form Tag Library(To simply forms development with dynamic behaviour).
+6)Having support for the XML to Java Object Conversion and vice versa
+7)Having support for the JSON TO Java Object Conversion and vice versa
+
+
+Spring Web MVC Architecture
++++++++++++++++++++++++++++++++++++
+1)Dispatcher Servlet(Front Controller)
+2)Handler Mapper
+3)Controller
+4)Model and view
+5)ViewResolver
+6)View
+
+DispatcherServlet is a pre defined servlet class in Spring Web mvc.
+Dispatcher Servlet is called as Front Controller/Framework Servlet.
+it is responsible to perform pre-processing and post-processing for every request
+
+=============================
+
+HandlerMapper is a pre defined class in sping web mvc
+Handler Mapper is used to identify Request Handler
+It will identify which request should be processed by which Controller class.
+HandlerMapper will identify Request handler by using url -pattern.
+
+=================================================================
+
+Controller is a classs which contains logic to handle request and response.
+Controller is called as Request Handler.
+We will create Controller classes using @Controller annotation.
+Controller will return data to Dispatcher in ModelandView object
+
+==============================================================
+Model represents Data in Key-Value Pair
+view Represents presentation file name.
+To Display the view file we will use ModelAndView Object.
+
+=========================================================
+
+ViewResolver is used to identify where view files available in our project.
+ViewResolver is used to identify physical location of view files.
+
+View component is used to render model data on view file to display that to end user.
+
+===================================================================
+
+Building First Web Application Using Spring Web MVC
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+1)Create spring starter application with spring web MVC
+
+	a)Spring boot starter web
+	b)tomcat-embed-jasper
+	c)devtools
+
+2)Create controller class and write required methods
+3)Create view files with presentation logic
+4)Configure ViewResolver in application.properties file
+5)Run the application and test it.
+
+Note1: web-starter will provide the support to build web apps with MVC architecture and it provides Tomcat as default embedded container.(We no need to setup server manually).
+
+Note2: Tomcat embed jasper will provide the support to work with jsp files in spring web mvc
+
+Note3: Devtools is used to restart the server when changes happened in the code.
+
+Note4: Java class will be represented as a spring controller using @Controller annotation.
+
+Note5: Controller class methods should be binded to HTTP Protocol methods to handle HTTP Requests.
+
+
+==============================================================================================
+
+What is context-Path?
+
+Context-Path represents name of our application
+In spring boot the default context-path is empty
+
+In Spring Boot we can set our context-path using below property in application.properties file
+
+			server.servlet.context-path=/webapp
+
+when we set context we have to access our application using context-path in URL
+	URL:	http://localhost:8080/webapp/first
+	
+Note: By default embedded tomcat server will run on the port number 8080. This is default behaviour.
+	  we can change embedded server port number using below properties in application.properties.
+	  
+	  
+	  http://localhost:8080/webapp/first
+	  
+	  Localhost:Localhost represents server IP(Server running in same machine).
+	  8080 represents server port number
+	  /webapp represents application context-Path
+	  /welcome represents method URL-Pattern
+	  
+=======================================================================================
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Sending Data from controller to UI:
+===================================
+
+We can send data from controller to UI In multiple ways:
+	1)ModelandView
+	2)Model
+	3)@ResponseBody
+	
+	
+====================================================================================================
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Forms development using spring mvc
+==================================
+
+Forms are very important in every web application.
+
+Forms are used to collect data from user.
+
+ex: Login forms, Registration , Search Form etc....
+
+Spring web mvc provided form  tag library to develop forms easily
+
+spring form tag library contains several tags.
+
+<form:form>
+<form:input>
+<form:password>
+<form:radioButton>&<form:radioButtons>
+<form:select>
+<form:option>&<form:options>
+<form:checkbox>&<form:checkboxes>
+<form:hidden>
+<form:error>
+
+-->> Spring Web Mvc support Form Binding that means it can bind form data to object and vice versa.
+
+
+
+-->To achieve Form Binding we need to create a binding class (Class Variables will be mapped with form fields).
+
+
+
+Steps to build form based appliation
+====================================
+1)create boot app with below dependencies
+a)web-starter
+b)devtools
+c)lombok
+
+2)create Form Binding class
+
+3)Create a controller class with required methods
+
+	a)method to display empty form(Get Request Method)
+	b)Method to handle form submission (Post Request Method
+
+4)Create view page with presentation logic
+
+
+
+==============================================================================
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Form Validation:
+
+==================
+Forms are used to caputre data from the user.
+
+To make sure users are entering valid data we will perform form validations on the data.
+
+Spring Web MVC having support to perform form validations.
+
+action means = we will pass the request to that url pattern
+model attribute means: we will use the binding class name here
+
+@NotEmpty
+@NotNull
+@Size
+@Min
+@Max
+
+================================================
+We need to add below dependency to perform form validations
+	spring boot starter validation 
+	
+	
+============================================================================================
+
+Thymleaf
+===============
+
+We used JSP as a presentation technology in our spring web based application.
+jsp can't be executed in browser directly
+when the request comes to jsp then internally jsp will be converted into servelet and that servlet will send response to browser.
+when we use jsp for presentation then burden will be increased on server because every jsp should be converted into servlet to produce the response the response to the browser.
+
+==========================================
+
+To overcome the problems of JSP we can use thymleaf as a presentation technology
+Thymleaf is a template engine that can be used in HTML pages directly
+HTML pages can be executed in browser directly.
+(Thymleaf performance will be fast when compared with jsps)
+
+In general, HTML pages are used for static data. If we use thymleaf in HTML then we can add dynamic nature to the HTML Pages.
+
+===================================================================================================
+
+We can develop spring boot application with thymleaf as presentation technology
+
+To use thymleaf in spring boot we have a starter
+		"sprint-boot-starter-thymleaf"
+		
+		
+procedure to develop spring boot application with thymleaf
+
+==================================================================
+
+create spring starter project with below dependencies
+	
+	a)Webstarter
+	b)thymleaf-starter
+	c)devtools
+	
+Create controller with required methods(@Controller)
+
+create thymleaf template in src/main/resources/templates folder(file extension.html)
+
+configure embedded server port number in application.properties file
+
+Run the application and test it.
+
+
+Note: No need to configure view resolver because Spring Boot will detect thymleaf template files and will process them
+
+
+=======================================================================================
+
+Embeded Servers:
+++++++++++++++++++++++++++++++
+
+===============================
+
+Spring boot provided embedded container to run our web application.
+
+When we add web-starter by default it is giving "Tomcat" as default embedded container.
+
+
+	tomcat
+	jetty
+	netty
+	undertow etc
+
+Note: We can deploy spring boot application into external servers also as a war file.
+
+
+How to change default container from Tomcat to jetty?
+
+->Exclude tomcat-starter from web starter.
+->Add Jetty dependency
+
+To make jetty as embedded container we need to make 3 changes.
+
+Remove tomcat-starter dependency
+
+exclude tomcat-starter from webstarter.
+
+Add Jetty dependencies
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-jetty</artifactId>
+    <version>4.0.4</version>
+    <scope>compile</scope>
+</dependency>
+
+
+==========================================================================================
+
+Aws SSH Login:
+
+ssh -i "D:\Linux-VM-AWS\KeyLinux.pem" ec2-user@ec2-18-61-69-191.ap-south-2.compute.amazonaws.com 
+
+
+Restful Services:
+
+========================================
+
+Rest stands for Representational state transfer
+Restful services are used to develop distributed application
+Distributed applications are used for B2B Communications
+B2B means Business to Business communication
+If one application is communicating with another application then those are called Distributed application
+Distributed application will re-use service of one application in another application
+Restful services are providing "Interoperabiility"
+
+Interoperabiility means irresepective of the platform and language application can communicate.
+
+Two Actors will be involved in Distributed application development
+	provider
+	Consumer
+	
+Provider means which will provide business services is called Provider Application
+The application which is accessing business service is called as consumer application
+
+Note: One provider application can have multiple consumer application
+
+Provider and Consumer will communicate using HTTP as a mediator.
+Provider and Consumer will exchange the data in Text/XML/JSON Format
+
+
+To start our journey with restful services development we should be good in below areas
+
+Http protocols(Methods, status codes, Req Structure, Res Structure).
+xml and JAX-B API(java architecture for xml binding)
+JSON and jackson API
+
+
+What is HTTP?
+
+HTTP Stands for Hyper Text transer protocol.
+It is used as a mediator between client and server.(Consumer & Provider)
+Consumer application will send HTTP Request to provider Application.
+Provider application will process the request and it will send HTTP Response to the consumer.
+
+Http Methods:
+=========================
+
+Http Methods are used to send request from consumer application to provider application.
+
+Http method will represent what type of operation client/Consumer wants to perform with provider
+
+###
+GET
+POST
+PUT
+DELETE
+
+Get request is used to retrieve data from provider application.
+Get request will not have body
+To Send any data from consumer to providing using GET request then we will use Path params and Query params.
+
+Note: Path Params and Query params data will displayed in the URL.
+
+Note: It is not recommended to send sensitive/secret  data using PATH Params and Query Params.
+
+Get request is Idempotent (Means if you send same GET request for multiple times also nothing will change at server).
+
+
+===========================================
+
+Post Request is used to create a new record at server
+When consumer wants to sends huge data or sensitive data then consumer will use POST request.
+post request contains request body
+Post request is non-idempotent
+
+
+Note: In Post Request we can send the data in URL and Request Body.
+
+Note: Request Body is the recommended approach to send sensitive data to server.
+
+=========================================================================
+
+PUT
+PUT request is used to update a record at a server
+When consumer wants to update a record at then consumer will send PUT request to provider 
+PUT request contains request body
+PUT request is non-idempotent
+
+Note: In PUT request we can send in URL and in Request Body.
+Note: Request body is the recommended approach to send sensitive data to server.
+
+
+===============================================================
+
+DELETE
+
+DELETE request is used to delete a record at server
+DELETE request contains request body
+DELETE request is non-idempotent
+
+
+=================================================================
+
+Http Request Structure: 
+=======================	
+Intial Request Line
+Header
+Empty Line
+Request Body
+
+=========================
+HTTP Response Structure:
+=========================
+
+Http Response Structure:
+Intial Response Line
+Header
+Empty line
+Response Body
+
+
+==============================
+
+HTTP Status Codes will represent the status of our request & Response
+
+1xx(100-199) --- info
+2xx(200-299)- OK(Success)
+3xx(300-399)--Redirect codes
+4xx(400-499)--Client error
+5xx(500-599)--Server error
+
+===================================================
+HTTP Status codes will represent how the request process by server/provider.
+
+
+XML====
+===+++++
+
+XML Stands for Extensible markup Language
+XML is free and open source
+XML is Intereoperable(Language independent and platform independent)
+XML we can use to transfer data from one application to other application.
+XML introduced by w3c org
+The intial version of xml is 1.0 and the current version of xml is also 1.0
+XML will represent the data in the form of elements
+An element is the combination of start tag and end tag
+ ex:<name>sandeep</name>
+ 
+ 
+===We will have 2 types of elements in the XML
+
+SIMPLE ELEMENT : The elements which contain data directly is called simple element.
+
+eg: <name>sandeep</name>
+
+COMPOUND ELEMENT: The element which contain child element is calles as compound element.
+eg: <person>
+		<id>101</id>
+		<name>sandeep</name>
+		<loc>hyd</loc>
+    </person>
+	
+Note: Here person is a compound element and id,name,person is a simple element.
+
+Note : XML should have only one root element.Inside the root element we can have multiple child elements.
+
+=============================================================
+JAX-B : Java architecture for XML Binding.
+
+JAX-B is used to convert java object to xml and xml to java object.
+
+JAX-B is free and opensource 
+
+JAX-B is given by sun microsystem.
+
+JAX-B is part of jdk upto 1.8v.
+
+If you are using jdk 1.8+ version of java then you need to add JAX-B dependency in pom.xml file.
+
+The process of converting java obj into xml is called as "Marshalling"
+The process of converting xml to java object is called as "UNMarshalling"
+
+----We can have attibutes for the elements 
+
+To perfom marshalling and unmarshalling we need to design binding class.
+
+The java class which represents the structure of XML is called as Binding class
+
+JAX-B provided annotations to represent java class as Binding class.
+
+Note: Binding class creation is one time operation.
+
+Note: Earlier people use to create Binding Classes using XSD, XSD represents structure of xml.
+
+
+@XmlAccessorType(XmlAccessType.FIELD)
+
+Control marshalling and unmarshalling using fields of entity class.
+
+@XmlAccessorOrder :==Follow order of variables in the class to marshall and unmarshall.
+
+@XmlElement(name ="PhoneNo") : It is optional
+it is the element name that it will come by default with variable name if we declared it as @XmlElement then we need to specify the name as element.It is used to change the name of the element.
+
+
+Note: By Default every variable is considered as element and variable name will be considered as element name.
+
+@XmlTransient ==== To skip a variable in marshalling.
+
+==============================================================================================
+
+JSON:
++++++++
+
+JSON Stands for Java Script Object Notation.
+
+JSON Will represent data in key value format.
+
+Ex:
+{
+"id":101,
+"name":"raju",
+"age":20
+
+}
+
+JSON is interoperable (Language independent and platform independent.
+
+JSON is light weight
+
+JSON is human readable and machine readable format.
+
+In today's world are using json format to exchange data in B2B communications.
+
+XML represents data in the tags format (open tag & closed tag)
+meta data will be more than the actual data in xml
+xml occupies more memory to represent data.
+
+Json will take less memory
+JSON is light weight.
+
+To work with JSON Data in java application we will have below 3rd party api'same
+
+JACKSON API
+GSON API
+
+By using above apis we can convert json data to java object and vice versa.
+
+
+Here the process of converting java object to json is called serialization.
+
+The process of converting json data to java object is called De-Serialization.
+
+
+=====================================================================================
+
+How to develop Rest API'
+
+==>To develop Rest API using java sun micro system released "JAX-RS" API
+JAX-RS api having 2 implementations.
+
+	1)Jersey(Sun Microsystem)
+	2)REST Easy(JBOSS)
+	
+Note: We can develop RESTful Services using any one of the above implementations.
+
+Spring framework also provided support to develop RESTful Services using spring WEB MVC module.
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Rest API Architecture:
+
+=========================
+
+We will have two actors in Restful Services
+	
+	1)Provider/Resources
+	2)Client/Consumer
+	
+==>The Application which is providing services to other applications is called as provider or resource application.
+
+The application which is accessing services from other appllications is called as Consumer or Client Application.
+
+
+Client application and Resource Application will exchanage the data in interoperable format like (XML & JSON).
+
+Note: Restful services are used to develop B2B Communications(No presentation logic , No view Resolver).
+
+
+Develop First REST API using spring Boot
+================================================
+
+Create spring starter application with below dependencies.
+
+	a)Web starter
+	b)devtools
+	
+2)Create RestController with required methods
+
+Note: To represent java class as Rest Controller we will use @RestController annotation.
+
+Every RestController method should be binded to HTTP Protocol method
+
+
+ex:@GetMapping,@PostMapping,@PutMapping,@DeleteMapping
+
+Run the application and test it.
+
+Note: To Test the Rest api's we will use POSTMAN tool
+
+Note: Download postman tool to test our Rest API Functionality.
+
+
+Note :Get Request will not contain the Body to send data.
+
+	We can use Query Params and path params to send data in Get Request.
+	Query params & path params will represent data in URL Directlyu
+	
+Query Params:
+++++++++++++++++++
+
+	Query params are used to send data to server in URL
+	Query params will represent the data in key-vale format
+	Query params will start with "?"
+	Query parameters will be seprated by '&'
+	Query parameters should present only at the end of the URL.
+	
+		EX:www.ashokit.in/course?name=sbms&trainer=Ashok
+		
+	To read the query parameters from the URL we will use @RequestParam annotation.
+	
+	
+	@GetMapping("/Welcome")
+	public ResponseEntity<String> getWelcomeMsg(@RequestParam String name){
+		
+		String respayload= name +" Welcome to Rest API";
+		
+		return new ResponseEntity<>(respayload,HttpStatus.OK);
+		
+	}
+	
+	
+	localhost:8080/Welcome?name=Sandeep&name=Surya
+	
+	
+==========================================================================================
+Working with two query parameters to test the URL:
+
+==================================================
+
+package in.sandeep.rest;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class CourseRestController {
+	
+	@GetMapping("/course")
+	public ResponseEntity<String> Coursefee(@RequestParam String cname,@RequestParam String tname) {
+		
+		String respbody = cname +" By "+ tname  + " Fee is 7000 INR"; 
+		
+		return new ResponseEntity<>(respbody,HttpStatus.OK);
+		
+	}
+
+}
+
+
+URL:http:/localhost:8080/course?cname=Java&tname=Sandeep
+
+
+
+
+
+
+-==============================================================================
+
+Path parameters or URL variables:
+=================================
+
+Path parameters are also used to send data to server in the URL
+	
+Path parameters will represent data directly in URL(no keys)
+
+Path Params can present anywhere in the URL
+
+Path params will be seprated by the (/)
+
+Path params should be represented in Method URL Pattern(Template Pattern)
+
+To Read path parameters we will use @PathVariable annotation.
+
+=====================================================================
+
+To Retrieve more than one record / resources we will use query params (Filtering)
+
+To Retrieve specific/unique record we will use path param(Single)
+
+
+================================
+
+What is produces?
+
+produces is a media type 
+it represents response formats supported by Rest Controller method
+one rest controller method can support multiple response formats(xml and json)
+
+Client should send a request with "Accept" http header
+
+Accept header represents in which format client expecting response
+
+Based on Accept Header value message converter will convert the response and it will send into client expected format.
+
+
+
+Working with HTTP POST Request
+=========================================
+
+Http post request is used to create new resource/record at server
+
+post request contains request body
+
+Client can send data to server in Request Body
+
+To bind rest controller method to POST we will use @PostMapping
+
+To read data from request body we will use @RequestBody Annotation.
+
+consumes represent in which format method can take input
+
+"Content-Type" header represents in which format client sending data in request body,
+
+
+========================================================================
+
+What is the difference between produces vs consumes
+
+Content type vs Accept?
+
+produces attribute represents in which formats method can provide response to clients.
+
+Consumes attribute represents in which format method can take request data form clients.
+
+--Accept Header represents in which format client expecting response from Rest API.
+
+==Content-Type header represents in which format client is sending request data to Rest API
+
+Note: We can use both consumes & produces in single REST API method.
+
+========================================================
+Requirement: Develop IRCTC REST API to book train ticket
+========================================================
+To Develop Rest API first we have to understand the requirement.
+
+Identify input/output data
+
+identify output/response data
+
+create request and response binding classes
+
+create rest controller with required methods
+
+Test Rest API methods behaviour.
+
+
+======================================================================================
+
+HTTP PUT Request:
+
+======================
+
+PUT Request is used to update an existing record/resoure at server
+PUT Request can take data in URL and in Request Body
+To bind our method to PUT request we will use @putMapping
+
+==========================================================================================
+
+Http Delete 
+=====================
+Delete request is used to delete an existing record/resource at server
+
+Delete request can take data in URL and in Request Body
+
+To bind our method to delete request we will use @DeleteMapping.
+
+
+=================================================================================================
+
+can we write the logic to update a record in POST request method?
+
+Ans ) Yes we can do it but not recommended. we need to follow HTTP protocol standards while developing Rest API.
+
+
+
+====================================================================================================
+
+
+Swagger
+=====================================
+Swagger is used to generate the documentation for the REST API'S
+
+Swagger UI is used to test REST API with user Interface.
+
+
+====================================================================================================================
+
+=====================================================================================================================
+
+CRUD Operations using Rest API:
+===============================
+
+Develop Rest API using Layered Architecture
+		web layer(Rest Controllers)Logic to deal with request and response
+		Business / Service layer(Business logic)
+		Dao layer(DB Communication)
+		DB
+
+
+======================================================================================================
+
+
+Embeded Database (H2):
+============================================
+
+Embedded databases are temporary databases/In memory databases.
+Embedded database are used for poc development.(poc:proof of concept).
+We no need to download and install embedded databases.
+Embedded Database will come along with application
+When we start application then embedded db will start and when we stop the application then embedded db will be stopped.
+
+Note:Data is not permanent in the embedded db.(When we stop the application we will loose the data)
+
+Note: In memory DBs are not used for SIT UAT PROD environments in the company.
+
+We can use H2 DB as an in-memory db for practise purpose.
+
+
+=====================================================================================
+
+Heroku
+=======
+Heroku cloud providing platform as a service to run our application(PaaS)
+Heroku cloud platform provided by salesforce cloud company.
+
+We can deploy 5 applications for the free of cost
+
+=======================================================================================
+
+How to deploy spring boot App in AWS cloud
+==========================================
+
+Create free tier account in AWS.
+
+Launch EC2 Linux Virtual machine in AWS cloud
+
+connect to ec2 Linux vm using mobaxtream/putty
+
+Upload your sping boot jar into EC2 VM-AWS\KeyLinux.
+
+Install java software in EC2 
+
+Run the java application.
+
+
+After create the ec2 instance once next step run the instance and add the security groups as 8080 then the we need to export the spring boot application as jar using maven build and copy the jar to linux ec2 instance then we need to use the java -jar application.jar then it will run.
+
+===========================================================================================================================
+
+
+The application which is giving service to other application is called Provider/Resource.
+
+We can develop Rest clients in 2 ways:
+
+======================================
+
+Rest Template(Outdated)
+Web Client (Trending)
+
+What is Rest Client?
+
+The application which is accessing the Rest API is called as Rest Client.
+
+Rest client appl and Rest API application will communicate using HTTP as mediator.
+
+Every programming language having support to develop Rest Client.
+
+Using spring boot also we can develop Rest Client.
+
+	1)Rest Template
+	2)Web Client(5.X version)
+	
+Rest Template is a predefined class, Which is part of "spring boot-starter-web" dependency. It supports only synchronus communication.
+
+Web client is a interface which is part of 'spring-boot-starter-webflux' dependency. It supports both synchronus and asynchronus communication.
+
+
+To Develop Rest client we need to know rest api details
+
+===========================================================
+
+API URL
+API REQUEST METHOD
+API REQUEST DATA Structure
+API Response Data Structure
+
+
+Rest API Team will send swagger documentatin to Rest CLient side team. Using swagger documentation we need to understand the api and we need to develop Rest Client logic to access rest api.
+
+============================================================================
+
+What is synchronus and asynchronus?
+
+Synchronous means blocking the thread untill we get response.
+
+Asynchronous means non blocking thread
+
+Rest Template supports only synchronus communication
+
+Web client supports both sync and async communication
+
+Web client introduced in Spring 5.xx version
+
+Webclient is part of WebFlux Starter.
+
+
+
+====================
+=====================================
+http get request 
+
+
+Working with dynamic properties:
+
+========================================
+
+server.port=9090
+
+welcome.msg =Welcome to sandeep page
+========================
+
+package com.sandeep.rest;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+
+@RestController
+public class WelcomeRestController {
+	
+	@Value("${welcome.msg}")
+	private String msg;
+	
+	@GetMapping("/")
+	public String welcomecontroler() {
+		
+		return msg;
+	}
+
+}
+
+
+
+============================================================
+
+Application messages and REST endpoint url's are not recommended to hardcode in java classes. Because if we change any messages or any url then we have to compile and package entire application.
+
+-->To avoid this problem we will configure messages and URL's in application.properties file or in application .yml file
+
+When we change application.properties file or application.yml file we no need to compile and build entire project.
+
+
+Working with App Properties:
+=============================
+
+ yml.file
+ ==========
+sandeep:
+  messages:
+   wishmsg: Welcome to welcome page!!
+   greetmsg: Hello Good Morning!!
+   byemsg: Thank you!!!
+   
+ ===========================================================
+ 
+ package com.sandeep.properties;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+import lombok.Data;
+
+@Data
+@Configuration
+@EnableAutoConfiguration
+@ConfigurationProperties(prefix="sandeep")
+public class Getproperties {
+	
+	private Map<String , String> messages = new HashMap<>();
+
+}
+
+
+========================================================================
+
+package com.sandeep.restcontroller;
+
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.sandeep.properties.Getproperties;
+
+@RestController
+public class Propertiescontroller {
+	
+	@Autowired
+	private Getproperties props;
+	
+	@GetMapping("/welcome")
+	public String getwelcomemsg() {
+		
+		return props.getMessages().get("wishmsg");
+	}
+	
+	@GetMapping("/greet")
+	public String greetmsg() {
+		
+		return props.getMessages().get("greetmsg");
+	}
+	
+	@GetMapping("/end")
+	public String endmsg() {
+	 Map<String, String> messages = props.getMessages();
+	 String value = messages.get("byemsg");
+	 return value;
+	}
+
+}
+=========================================================================================================
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Spring boot Actuators:
+======================
+->Actuators is one of the powerful feature introduced in spring Boot.
+->Actuators are used to monitor and manage our application.
+->Actuators are giving production ready feature for our boot application.
+
+Actuator Endpoint:
+==================
+/health: To get application health status
+/info : To get application information.
+/beans: To get what beans loaded by our application.
+/mappings: To get what URL patterns available in our application.
+/configProps: To get configuration properties loaded by our application.
+/heapdump: To download heap data
+/threaddump: To get threads information
+/shutdown: To stop our application (This is special, it is binded to POST request)
+
+To work with actuators we have to use "spring-boot-starter-actuator" dependency.
+
+Note: /health is a default endpoint which we can access directly.
+
+We can expose other actuator endpoints using below property.
+
+	management						
+	 endpoints
+	  web
+	   exposure
+	    include or :'*'
+		 -beans
+		 -mappings
+		 
+		 We can also use exclude also exclude:beans
+		 
+		 
+================================================================================
+
+Working with Shutdown
++++++++++++++++++++++++
+
+IT is used to stop our application.
+
+we need to enable this manually
+
+it is binded to http post request
+
+	management						
+	 endpoints
+	  web
+	   exposure
+	    include or :'*'
+	 endpoint:
+	  shutdown:
+	   enabled: true
+	   
+====================================================================================================
+
+
+
+Microservices:
+==============
+Application will be developed in 2 ways
+1)Monolithic Architecture
+2)Microservices Architecture
+
+if we develop all the functionallities in one single application then it is called as monolithic application.
+
+Advantages:
+===========
+
+Development is easy
+Deployment is easy
+performance
+Easy Testing
+Easy Debugging
+KT is easy
+
+Disadvantanges:
+===============
+
+Single point of failure
+Whole application Redeployment
+Scalability(Increasing and Decreasing resources based on demand)
+Reliability(Strong)
+Availability(Zero Downtime)
+
+
+===>If we develop the functionallities in multiple service/apis then it is called as Microservices Architecture based application.
+
+Every microservices will have its own goal.
+
+Advantages of microservices:
+============================
+
+Loosely coupled
+Fast Development
+Quick Releases
+Flexibility
+Scalability
+No single point of failure
+Technology independence
+
+Challenges:
+==============
+Bounded Context(identifying no of services to develop)
+Lot of configurations(Database for every service we need to configure in every service)
+visibility(not get a chance to work with all the services)
+Testing is difficult
+Debugging
+
+=================================================================================
+
+Microservices Architecture:
+
+===========================
+
+Microservices is a design pattern to develop applications.
+
+There is no fixed architecture for microservices based application
+
+people are customizing Microservices architecture according to their requirement.
+
+
+=============================================
+
+Let us see generalized architecture of microservices.*************
+
+1)Service Registry
+2)Admin Server
+3)Zipkin Server
+4)Services(Rest API'S)
+5)FeignClient
+6)API Gateway
+
+
+Service Registry:Eureka server
+================	
+In microservices, many services run on different ports/IPs.
+
+Example:
+
+User Service → 8081
+Order Service → 8082
+Payment Service → 8083
+
+If port changes dynamically, how will one service find another?
+
+Service Registry solves this.
+
+All services register themselves.
+
+USER-SERVICE → registered
+ORDER-SERVICE → registered
+PAYMENT-SERVICE → registered
+
+Then other services ask registry.
+
+
+Admin Server:It
+============
+ is used to monitor our application at one place (Collection of all services) and provide the user interface.
+ 
+ 
+	Used to monitor all microservices in one dashboard.
+
+Shows:
+
+UP / DOWN status
+Memory usage
+CPU
+Logs
+Health checks
+Environment properties
+Real-Time Example
+
+If Payment Service crashes, Admin Server shows RED / DOWN.
+
+
+Zipkin Server:It is used to trace our application execution details distributed log tracing we will understand by using zipkin server. Which request received how much time taken by server for process the request each execution details. 
+
+
+What is use?
+
+Tracks one request across many services.
+
+Example:
+
+Client places order:
+
+Gateway → Order Service → Payment Service → Inventory Service
+
+Zipkin shows:
+
+Which service called
+Time taken
+Where delay happened
+Full request path
+Real-Time Benefit
+
+If response slow, identify bottleneck.
+
+
+Services: Services are nothing but rest api's are developed in project. it will act as a client for Service Registry.The actual business logic present in the services.
+
+ 
+ 
+FeignClient:it is used for interservice communication.One api is communicating with another api within the project.Our services will talk to other services is called as External service communication.
+
+
+API Gateway:Will act as a mediator between users to the backend. Api gateway will act as a front gate for all the api's.
+	(Filters+Routing).
+	
+	
+	
+	Service Registry: Service Registry is used to register all our backend services/api
+	Service Registry will maintain services names , urls and status of each services.
+	We can use EurekaServer as a service Registry.
+	
+	Note: Eurekaserver provided by spirng cloud Netflix Library.
+	
+	-AdminServer is used to monitor and manager all our backend services at one place.
+	-AdminServer will provide user interface to monitor and manager our service
+	-Using AdminServer user interface we can access Acutator Endpoints of our services at one place.
+	
+	Note : Adminserver and Adminclient provided by "code centric" company (we can integrate with boot)
+	
+	
+	-ZipkinServer is used for Distributed Log Tracing
+	-ZipkinServer will provide user interface to monitor application execution details.
+	-How many services involved and which service took more time to process the request can be monitored using zipkin.
+	
+	Note: Zipking is the third party opensource server(can be integrated with springboot)
+	
+	-Backend Services are nothing but rest api's (Which are also called as microservices)
+	-Backend Rest api's contains actual business logic of our application
+	-one project will have multiple rest api in the backend.
+	-Each Backend api will act as client for Service\
+>,mn 	Registry+ Adin Server + Zipkin Server
+	
+	
+	
+	
+	-with in the same application if one backend api communicating with another backend api then it is called as interservice communication.
+	
+	Feign Client will be used to perform interservice Communication.
+	
+	Note: Based on requirement our backend api's can communicate wit 3rd party apis using Rest Template or Webclient.
+	
+	
+	
+	
+	-API Gateway will act as entry point for backend apis
+	-it acts as mediator between end users and backend apis.
+	-API Gateway contains Filter and Routing
+	-Filters we can use to authenticate incoming requests.
+	-Routing will decide which request should go to which backend api
+	
+	Note: Earlier we used to work with Zuul Proxy for API Gateway but now it got removed from latest version of boot
+	
+	Spring cloud Gateway we can use as API Gateway for our application.
+	
+	
+Microservices Mini Project Implementation
+#########################################
+
+Step 1=> Create Service Registry using Eureka Server
+
+1) Spring-cloud-netflix-eureka-server-dependency
+
+2) configure @EnableEurekaServer annotation at a boot start class
+
+3) Configure below propeties in application.yml file
+
+Server
+	port:8761
+	
+eureka:
+	client:
+		register-with-eureka:false
+		
+4)Run the application and access in browser
+
+	url: http://localhost:8761/
+	
+	
+Step 2:
+++++++++++++++
+
+Create Spring Boot Application with Admin server******************************
+
+1) Create Boot application with below dependencies
+
+	a)web-starter
+	b)devtools
+	c)admin-server(code centric)
+	
+2)Configure @EnableAdminServer annotation at boot start class
+
+3)Configure embedded container Port NUMBER
+
+4) Run the application and access the application in the browser
+	
+	URL:http://localhost:port
+	
+	
+	
+Step 3:
+===========================
+
+Download the zipkin jar 
+
+ https://repo1.maven.org/maven2/io/zipkin/zipkin-server/?utm_source=chatgpt.com
+ 
+ Run the command 
+ java -jar <name of the jar>
+ 
+ it will run in 9411 port
+ 
+ 
+ 
+ ==============================================================================
+ 
+ Step 4: WELCOME API:
+ 
+ ============
+ 
+ Create boot appliation with below dependencies
+	
+	-eureka-discovery-client
+	-admin-client
+	-zipkin
+	-sleuth(it is for logging)
+	-webstarter
+	-devtools
+	-actuator
+	
+2)Configure @EnableDiscoveryclient annotation at start class(it will search and register with Eureka)
+
+3)Create Rest Controller with required methods
+
+4)Configure below properties in application.yml
+
+	-server port
+	-admin server url
+	-acutator endpoint
+	-application name
+	
+	
+	
+	server:
+  port: 8081
+spring:
+  application:
+    name: WELCOME-API
+
+  boot:
+    admin:
+      client:
+        url: http://localhost:1111/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+		
+		
+=================================================================
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>4.0.5</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.sandeep</groupId>
+	<artifactId>31-SBMS_WelcomeAPI</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>31-SBMS_WelcomeAPI</name>
+	<description>This is the Spring web mvc Rest API </description>
+	<url />
+	<licenses>
+		<license />
+	</licenses>
+	<developers>
+		<developer />
+	</developers>
+	<scm>
+		<connection />
+		<developerConnection />
+		<tag />
+		<url />
+	</scm>
+	<properties>
+		<java.version>21</java.version>
+		<spring-boot-admin.version>4.0.3</spring-boot-admin.version>
+		<spring-cloud.version>2025.1.1</spring-cloud.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-micrometer-tracing-brave</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webmvc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-zipkin</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.codecentric</groupId>
+			<artifactId>spring-boot-admin-starter-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-tracing-bridge-brave</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-micrometer-tracing-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webmvc-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-zipkin-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.zipkin.reporter2</groupId>
+			<artifactId>zipkin-reporter-brave</artifactId>
+		</dependency>
+	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>de.codecentric</groupId>
+				<artifactId>spring-boot-admin-dependencies</artifactId>
+				<version>${spring-boot-admin.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+
+
+
+
+
+===========================================================================================
+
+
+
+package com.sandeep;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+
+@SpringBootApplication
+@EnableDiscoveryClient
+public class Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
+
+}
+
+WelcomeRestController:
+=====================
+
+package com.sandeep;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class WelcomeRestController {
+
+	
+	@GetMapping("/welcome")
+	public String welcomemsg() {
+		
+		String msg = "Welcome to Sandeep Microservice";
+		
+		return msg;
+	}
+}
+
+	
+	
+===============================================================================================================
+
+
+ Step 5:
+ 
+ ============
+ 
+ Create boot appliation with below dependencies
+	
+	-eureka-discovery-client
+	-admin-client
+	-zipkin
+	-sleuth(it is for logging)
+	-webstarter
+	-devtools
+	-actuator
+	-FeignClient
+	
+2)Configure @EnableDiscoveryclient annotation and @Enablefeignclient at start class(it will search and register with Eureka)
+
+3)Create Rest Controller with required methods
+
+4)Create FeignClient to access WELCOME-API
+
+5)Configure below properties in application.yml
+
+	-server port
+	-admin server url
+	-acutator endpoint
+	-application name
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=============================================================================================================
+Step 6:
+
+Develop API Gateway:
+=====================
+
+Create boot application with below dependencies
+
+-cloud gateway
+-eureka-client
+-web-starter
+-devtools
+
+2)Configure @EnableDiscoveryClient annotation at boot start class
+
+3)Configure Server port & API Routing in application.yml file
+
+4)Run the application and start it.
+
+
+
+
+=========================================================================================
+
+Load Balancing:
+
+================
+
+
+Load Balancing is the process of distributing loads to multiple servers.
+
+
+
+
+If we run our application on single server then all requests will be sent to single server
+->Burder will be increased on the server
+->When burden got increases request processing gets delayed
+
+->Sometimes our server might crash due to heavy loaded
+
+
+***********To overcome the problem*************************
+
+-> Load Balancing is the process of distributing load to multiple servers
+
+
+
+#####################################################################3
+
+Scaling:
+============
+
+Scaling can be done in 2 ways
+
+1)Vertical scaling: Increasing system resources(Ex: RAM,CPU,PROCESSOR ETC)
+
+2)Horizontal Scaling: Increasing the servers to run our application.
+
+
+scale up : Increasing number of servers based on demand.
+
+scale down: Decreasing the no of servers when traffic is less.
+
+
+Note : In cloud platforms like AWS , Azure, and GCP we have Auto-scaling concept.
+
+
+-->Auto Sclaing means no of servers will be increased or decreased based on no of requests coming to application.
+
+
+
+Circuit Breaker:
+
+================================
+
+Circuit Breaker is a design pattern.
+
+It is used to implement fault tolerance systems.
+
+Fault Tolerance systems are also called as resillence systems.
+
+
+
+When m1 methods is failing contionusly ex: for 5 requests) then i want to execute only m2() method directly for next 30 mins. We can achieve this requirement by using "Circuit Breaker".
+
+
+
+Cache:
+===========
+
+What is cache?
+
+-->Cache is a temporary storage. 
+
+When our application want to access same data frequently then we will use cache memory.
+
+Cache will improve performance of our application.
+
+Cache memory will improve performance of the application.
+
+Note: Database calls are always costly which will take more time to execute.
+
+	To reduce no of round trips between application and database we will use 'cache'.
+	
+Redis cache:
+=================
+
+Redis is one of the distributed cache available in the market.
+
+Redis will store data in key-value pair
+
+Multiple application can connect with reddis cache at a time.
+
+The opensource in-memory data store used by millions of developers as a database, cache streaming engine and message broker.
